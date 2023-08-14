@@ -1,67 +1,80 @@
 ---
-title: "Association rule mining"
+title: "Q8"
+author: "Raghav Vaidya"
+date: "2023-08-13"
 output: pdf_document
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+#Loading Libraries
 library(tidyverse)
 library(arules)
 library(arulesViz)
 ```
 
-###Question Revisit the notes on association rule mining and the R example on music playlists: playlists.R and playlists.csv. Then use the data on grocery purchases in groceries.txt and find some interesting association rules for these shopping baskets. The data file is a list of shopping baskets: one person's basket for each row, with multiple items per row separated by commas. Pick your own thresholds for lift and confidence; just be clear what these thresholds are and say why you picked them. Do your discovered item sets make sense? Present your discoveries in an interesting and visually appealing way.
+### Question
+
+Revisit the notes on association rule mining and the R example on music playlists: playlists.R and playlists.csv. Then use the data on grocery purchases in groceries.txt and find some interesting association rules for these shopping baskets. The data file is a list of shopping baskets: one person's basket for each row, with multiple items per row separated by commas. Pick your own thresholds for lift and confidence; just be clear what these thresholds are and say why you picked them. Do your discovered item sets make sense? Present your discoveries in an interesting and visually appealing way.
 
 Notes:
 
-This is an exercise in visual and numerical story-telling. Do be clear in your description of what you've done, but keep the focus on the data, the figures, and the insights your analysis has drawn from the data, rather than technical details. The data file is a list of baskets: one row per basket, with multiple items per row separated by commas. You'll have to cobble together your own code for processing this into the format expected by the "arules" package. This is not intrinsically all that hard, but it is the kind of data-wrangling wrinkle you'll encounter frequently on real problems, where your software package expects data in one format and the data comes in a different format. Figuring out how to bridge that gap is part of the assignment, and so we won't be giving tips on this front.
+This is an exercise in visual and numerical story-telling. Do be clear in your description of what you've done, but keep the focus on the data, the figures, and the insights your analysis has drawn from the data, rather than technical details.
+The data file is a list of baskets: one row per basket, with multiple items per row separated by commas. You'll have to cobble together your own code for processing this into the format expected by the "arules" package. This is not intrinsically all that hard, but it is the kind of data-wrangling wrinkle you'll encounter frequently on real problems, where your software package expects data in one format and the data comes in a different format. Figuring out how to bridge that gap is part of the assignment, and so we won't be giving tips on this front.
 
-###Answer First we read the text file given and convert it into "transaction" class from
+### Answer
 
+First we read the text file given and convert it into "transaction" class form.
 ```{r}
+#Reading the Groceries text file, splitting and then converting to "transaction class"
 transactions <- readLines("groceries.txt")
 transactions <- strsplit(transactions, split = ",")
 transactions <- as(transactions, "transactions")
 ```
-
-Now we'll plot Item Support Distribution Histogram to identify freuquency of Single Item Support and Item Frequency Plot to determine most common items.
-
+Now we'll plot Item Support Distribution Histogram to identify the Support frequency of Single Items. We also make a  Item Frequency Plot to determine most common items.
 ```{r}
+#Plotting Single item support distribution
 item_support <- itemFrequency(transactions)
 hist(item_support, main = "Item Support Distribution", xlab = "Support")
-```
-
-```{r}
+#Item Frequency Plot
 itemFrequencyPlot(transactions, topN = 20, type = "relative", main = "Item Frequency Plot")
 ```
-
-As we can see, Whole Milk is the most common item bought in more than 25% of the transactions.
-
-Let's take the support as 0.025 which is near the mean support. Now we'll look for association rules by setting initial parameters as 2 for min-len and 0.3 for confidence.
-
 ```{r}
-rules <- apriori(transactions, parameter = list(supp = 0.025, conf = 0.3, target = "rules", minlen = 2))
+#Getting info on transactions and support values
+summary(transactions)
+#Getting info on support value distribution
+summary(item_support)
+```
+\
+As we can see, Whole Milk is the most common item occuring in more than 25% of the transactions.\
+Now to start with rule mining, let's take the support as 0.025 which is near the mean of item support distribution. Now we'll look for association rules by setting initial parameters as 2 for min-len and 0.3 for confidence. We set 2 because upon seeing the length distribution of the items we see that majority of grocery lists have a length of at least 2 (i.e 2 items in the bag). 1 might be too low and 3 might be too high for an initial parameter. Also let's start confidence from 0.1 and slowly make our way up to 0.8 which is considered good for most cases.
+```{r}
+#Plotting for Top 10
+rules <- apriori(transactions, parameter = list(supp = 0.025, conf = 0.1, target = "rules", minlen = 2))
 plot(rules[1:10], method = "graph", control = list(type = "items"))
 ```
-
-Now let's try to reduce the Support to 1st Qt that is 0.013 and increasing minlen to 3.
-
+\
+We got 67 rules. Most of the nodes are going in and out of Whole Milk so this graph is not much useful. Now let's try to reduce the Support to 1st Qt which is around 0.015 and increase confidence to 0.2.
 ```{r}
-rules <- apriori(transactions, parameter = list(supp = 0.013, conf = 0.4, target = "rules", minlen = 3))
+#Plotting for Top 10
+rules <- apriori(transactions, parameter = list(supp = 0.015, conf = 0.2, target = "rules", minlen = 2))
 plot(rules[1:10], method = "graph", control = list(type = "items"))
 ```
-
-Finally, let's try with a lower Support of 0.01 and min-len 2 with confidence 0.5.
-
+\
+We get 115 rules with way items. We see that Whole Milk is still a common occurrence. Let's see how much further we can improve. We'll try decreasing the support ten fold and increasing confidence to 0.8.
 ```{r}
-rules <- apriori(transactions, parameter = list(supp = 0.01, conf = 0.5, target = "rules", minlen = 2))
+#Plotting for Top 10
+rules <- apriori(transactions, parameter = list(supp = 0.0015, conf = 0.8, target = "rules", minlen = 2))
 plot(rules[1:10], method = "graph", control = list(type = "items"))
 ```
-
-We can observe a few things from this:
-
-1\. Whenever pip fruit is bought, whole milk is likely bought too.
-
-2\. If people purchase root vegetables or citrus fruits, they are likely to purchase other vegetables too.
-
-3\. Whenever people purchase tropical fruits, they likely purchased other vegetables. Support 0.01 and confidence 0.5 is chosen as the top 10 items provide a good lift between 2 to 3.
+\
+We got 60 rules.
+\
+We can conclude a few things from the graphs:\
+1. People are likely to purchase root vegetables if they purchase beef.\
+2. If people purchase chicken or frozen vegetables, they will likely also buy other vegetables.\
+3. If Red/blush wine or liquor is bought, bottled beer is extremely likely to be purchased.\
+\
+The above observations do make sense to a certain extent. \
+1. Root vegetables are an important ingredient for beef stew which is a popular dish, hence they are bought together with beef.\
+2. For the second observation- we can not reason certainly as we don't know what other vegetables consist of but vegetables- frozen or unfrozen are important ingredients for many chicken dishes.\
+3. Finally for the third observation, it is evident that people who drink alcohol like most types of alcohols. Hence people who indulge in drinking tend to buy such items together. One other explanation is that people tend to buy a variety of alcohols for social events such as parties, get-togethers etc. Hence people buy a lot of these items together, usually in bulk, for such events. 
