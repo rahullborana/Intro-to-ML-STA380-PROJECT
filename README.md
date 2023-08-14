@@ -1,2 +1,8 @@
-# Intro-to-ML-STA380-PROJECT
-Repository for STA380 PROJECT submission
+# Introduction to ML (STA380)
+A repository for STA380 PROJECT exercies submited by the group members:
+  1. Rahull
+  2. Anurag
+  3. Raghav
+  4. Pratyush
+
+- [Problem 1](new.ipynb)
