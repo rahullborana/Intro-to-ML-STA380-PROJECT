@@ -12,6 +12,6 @@ A group submission for STA380 PROJECT exercises by the members:
 - [Visual story telling part 2: Capital Metro data](problem4.ipynb)
 - [Clustering and dimensionality reduction](problem5.ipynb)
 - [Market segmentation](problem6.ipynb)
-- [The Reuters corpus]
+- [The Reuters corpus](problem7.ipynb)
 - [Association rule mining](problem8.pdf)
 - [Image classification with neural networks](problem9.ipynb)
