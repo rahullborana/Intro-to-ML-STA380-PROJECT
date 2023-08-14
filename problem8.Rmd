@@ -35,7 +35,9 @@ hist(item_support, main = "Item Support Distribution", xlab = "Support")
 itemFrequencyPlot(transactions, topN = 20, type = "relative", main = "Item Frequency Plot")
 ```
 
-As we can see, Whole Milk is the most common item occurring in more than 25% of the transactions. Also let's take the support as 0.025 which is near the mean support. Now we'll look for association rules by setting initial parameters as 2 for min-len and 0.3 for confidence.
+As we can see, Whole Milk is the most common item bought in more than 25% of the transactions.
+
+Let's take the support as 0.025 which is near the mean support. Now we'll look for association rules by setting initial parameters as 2 for min-len and 0.3 for confidence.
 
 ```{r}
 rules <- apriori(transactions, parameter = list(supp = 0.025, conf = 0.3, target = "rules", minlen = 2))
@@ -49,11 +51,17 @@ rules <- apriori(transactions, parameter = list(supp = 0.013, conf = 0.4, target
 plot(rules[1:10], method = "graph", control = list(type = "items"))
 ```
 
-Finally, let's try with a lower Support of 0.01 and min-len 2 with confidense 0.5.
+Finally, let's try with a lower Support of 0.01 and min-len 2 with confidence 0.5.
 
 ```{r}
 rules <- apriori(transactions, parameter = list(supp = 0.01, conf = 0.5, target = "rules", minlen = 2))
 plot(rules[1:10], method = "graph", control = list(type = "items"))
 ```
 
-We can observe a few things from this: 1. Whenever pip fruit is bought, whole vegetable is likely bought too. 2. If people purchase root vegetables or citrus fruits, they are likely to purchase other vegetables too. 3. Whenever people purchase tropical fruits, they likely purchase other vegetables. Support 0.01 and confidence 0.5 is chosen as the top 10 items provide a good lift between 2 to 3.
+We can observe a few things from this:
+
+1\. Whenever pip fruit is bought, whole milk is likely bought too.
+
+2\. If people purchase root vegetables or citrus fruits, they are likely to purchase other vegetables too.
+
+3\. Whenever people purchase tropical fruits, they likely purchased other vegetables. Support 0.01 and confidence 0.5 is chosen as the top 10 items provide a good lift between 2 to 3.
