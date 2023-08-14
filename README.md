@@ -1,5 +1,5 @@
 # Introduction to ML (STA380)
-A repository for STA380 PROJECT exercies submited by the group members:
+A repository for STA380 PROJECT exercises; submitted by the following group members:
   1. Rahull
   2. Anurag
   3. Raghav
