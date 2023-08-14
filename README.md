@@ -2,7 +2,7 @@
 A group submission for STA380 PROJECT exercises by the members:
   1. Rahull Ranjit Borana (Email: rahullborana@utexas.edu, UT EID: rb47374)
   2. Anurag
-  3. Raghav
+  3. Raghav Vaidya (Email: raghav.vaidya@utexas.edu, UT EID: rv25256)
   4. Pratyush Sharma (Email: pratyush@utexas.edu, UT EID: ps35484)
 
 ## *Link to the solutions*
