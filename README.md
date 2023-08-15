@@ -1,7 +1,7 @@
 # Introduction to ML (STA380)
 A group submission for STA380 PROJECT exercises by the members:
   1. Rahull Ranjit Borana (Email: rahullborana@utexas.edu, UT EID: rb47374)
-  2. Anurag
+  2. Anurag Sahu (Email: anurag.sahu@utexas.edu, UT EID: as229468)
   3. Raghav Vaidya (Email: raghav.vaidya@utexas.edu, UT EID: rv25256)
   4. Pratyush Sharma (Email: pratyush@utexas.edu, UT EID: ps35484)
 
